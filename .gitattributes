@@ -1,0 +1,30 @@
+* text=auto
+*.sh text eol=lf
+*.env text eol=lf
+*.swift text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.cff text eol=lf
+*.plist text eol=lf
+*.xcprivacy text eol=lf
+*.pbxproj text eol=lf linguist-generated
+*.xcscheme text eol=lf
+*.xcworkspacedata text eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.heic binary
+*.pdf binary
+
+.agents/ export-ignore
+.claude/ export-ignore
+.cursor/ export-ignore
+.idea/ export-ignore
+.serena/ export-ignore
+.vscode/ export-ignore
+AGENTS.md export-ignore
+CLAUDE.md export-ignore

@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "[0-9]*.[0-9]*.[0-9]*"
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    name: Verify and draft release
+    runs-on: macos-26
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Verify Swift toolchain
+        run: |
+          source scripts/toolchain.env
+          [[ "$(swift --version | sed -n '1s/.*version \([0-9][0-9.]*\).*/\1/p')" == "$SWIFT_VERSION" ]]
+      - name: Validate the SemVer tag
+        run: |
+          [[ "$GITHUB_REF_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          git tag --points-at HEAD | grep -Fxq "$GITHUB_REF_NAME"
+      - name: Build and verify the source archive
+        env:
+          RADIOKIT_RELEASE_OUTPUT: ${{ runner.temp }}/release
+        run: ./scripts/verify-release.sh "$GITHUB_REF_NAME"
+      - name: Build the DocC archive
+        run: |
+          ./scripts/generate-documentation.sh "$RUNNER_TEMP/documentation"
+          tar -czf \
+            "$RUNNER_TEMP/release/RadioKit-$GITHUB_REF_NAME.docc.tar.gz" \
+            -C "$RUNNER_TEMP/documentation" \
+            .
+          (
+            cd "$RUNNER_TEMP/release"
+            shasum -a 256 \
+              "RadioKit-$GITHUB_REF_NAME.docc.tar.gz" \
+              > "RadioKit-$GITHUB_REF_NAME.docc.tar.gz.sha256"
+            shasum -a 256 \
+              "RadioKit-$GITHUB_REF_NAME.tar.gz" \
+              "RadioKit-$GITHUB_REF_NAME.docc.tar.gz" \
+              > SHA256SUMS
+          )
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: RadioKit-${{ github.ref_name }}
+          path: ${{ runner.temp }}/release
+          if-no-files-found: error
+      - name: Create a draft GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          gh release create "$GITHUB_REF_NAME"
+          "$RUNNER_TEMP/release/RadioKit-$GITHUB_REF_NAME.tar.gz"
+          "$RUNNER_TEMP/release/RadioKit-$GITHUB_REF_NAME.tar.gz.sha256"
+          "$RUNNER_TEMP/release/RadioKit-$GITHUB_REF_NAME.docc.tar.gz"
+          "$RUNNER_TEMP/release/RadioKit-$GITHUB_REF_NAME.docc.tar.gz.sha256"
+          "$RUNNER_TEMP/release/SHA256SUMS"
+          --draft --generate-notes --verify-tag --title "RadioKit $GITHUB_REF_NAME"
