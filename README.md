@@ -3,12 +3,19 @@
 [![CI](https://github.com/binarydreams-io/RadioKit/actions/workflows/ci.yml/badge.svg)](https://github.com/binarydreams-io/RadioKit/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/binarydreams-io/RadioKit)](https://github.com/binarydreams-io/RadioKit/releases)
 
+<a href="https://binarydreams.io" target="_blank" rel="noopener noreferrer">
+  <img src="Icon.svg" alt="RadioKit icon" width="120" align="left">
+</a>
+
 RadioKit is a Swift package for internet radio playback on Apple platforms.
 It uses `AVPlayer` for live streams and integrates with system media controls.
 
 Version `1.0.0` uses Swift tools 6.3 and requires Swift 6.3.3.
 It supports iOS 17 or later and macOS 14 or later.
 The package has no third-party package dependencies.
+
+<br clear="left">
+<br>
 
 ## Installation
 
