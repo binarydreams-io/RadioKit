@@ -92,6 +92,34 @@ If access is unavailable, the parsed artist and title remain available without c
 ## RadioPlayer Example
 
 The complete SwiftUI example is in `Examples/RadioPlayer`.
+See the [RadioPlayer example page](Examples/RadioPlayer/README.md) for its features, screenshots, MusicKit setup, and build instructions.
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="Examples/RadioPlayer/README.md">
+        <img src="Documentation/Assets/Player.png" alt="RadioPlayer full-screen interface" width="320">
+      </a>
+    </td>
+    <td align="center">
+      <a href="Examples/RadioPlayer/README.md">
+        <img src="Documentation/Assets/Now%20Playing.png" alt="RadioPlayer Now Playing interface on the iOS Lock Screen" width="360">
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Full player</strong></td>
+    <td align="center"><strong>Lock Screen</strong></td>
+  </tr>
+</table>
+
+<p align="center">
+  <a href="Examples/RadioPlayer/README.md">
+    <img src="Documentation/Assets/Island.png" alt="RadioPlayer Now Playing interface in Dynamic Island" width="600">
+  </a>
+  <br>
+  <strong>Dynamic Island</strong>
+</p>
 
 1. Open the Xcode project in that directory.
 2. Select the included app scheme and a supported destination.
