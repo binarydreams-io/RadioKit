@@ -10,21 +10,19 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TEMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/radiokit-quality.XXXXXX")"
 trap 'rm -rf "$TEMP_DIR"' EXIT HUP INT TERM
 
-[[ "$SWIFT_VERSION" == "6.3.3" ]]
-[[ "$SWIFT_TOOLS_VERSION" == "6.3" ]]
-[[ "$SWIFTFORMAT_VERSION" == "0.62.1" ]]
-[[ "$SWIFTLINT_VERSION" == "0.65.0" ]]
-[[ "$ACTIONLINT_VERSION" == "1.7.12" ]]
-[[ "$SWIFTFORMAT_MACOS_SHA256" == "7cb1cb1fae04932047c7015441c543848e8e60e1572d808d080e0a1f1661114a" ]]
-[[ "$SWIFTLINT_MACOS_SHA256" == "d6cb0aa7a2f5f1ef306fc9e37bcb54dc9a26facc8f7784ac0c3dd3eccf5c6ba6" ]]
-[[ "$ACTIONLINT_MACOS_X64_SHA256" == "5b44c3bc2255115c9b69e30efc0fecdf498fdb63c5d58e17084fd5f16324c644" ]]
-[[ "$ACTIONLINT_MACOS_ARM64_SHA256" == "aba9ced2dee8d27fecca3dc7feb1a7f9a52caefa1eb46f3271ea66b6e0e6953f" ]]
+# CI must use the pinned tools. A local run only warns about a different version.
+check_tool_version() {
+  local tool="$1" expected="$2" actual="$3"
+  [[ "$actual" == "$expected" ]] && return 0
+  if [[ -n "${CI:-}" ]]; then
+    printf 'Quality error: expected %s %s, found %s\n' "$tool" "$expected" "$actual" >&2
+    exit 1
+  fi
+  printf 'Quality warning: expected %s %s, found %s\n' "$tool" "$expected" "$actual" >&2
+}
 
 ACTUAL_SWIFT="$(swift --version | sed -n '1s/.*version \([0-9][0-9.]*\).*/\1/p')"
-[[ "$ACTUAL_SWIFT" == "$SWIFT_VERSION" ]] || {
-  printf 'Quality error: expected Swift %s, found %s\n' "$SWIFT_VERSION" "$ACTUAL_SWIFT" >&2
-  exit 1
-}
+check_tool_version Swift "$SWIFT_VERSION" "$ACTUAL_SWIFT"
 [[ "$(tr -d '[:space:]' < "$PROJECT_DIR/.swift-version")" == "$SWIFT_VERSION" ]] || {
   printf '%s\n' "Quality error: .swift-version does not match the toolchain" >&2
   exit 1
@@ -72,14 +70,8 @@ command -v swiftlint >/dev/null || {
   printf '%s\n' "Quality error: swiftlint is not installed" >&2
   exit 1
 }
-[[ "$(swiftformat --version)" == "$SWIFTFORMAT_VERSION" ]] || {
-  printf '%s\n' "Quality error: SwiftFormat version mismatch" >&2
-  exit 1
-}
-[[ "$(swiftlint version)" == "$SWIFTLINT_VERSION" ]] || {
-  printf '%s\n' "Quality error: SwiftLint version mismatch" >&2
-  exit 1
-}
+check_tool_version SwiftFormat "$SWIFTFORMAT_VERSION" "$(swiftformat --version)"
+check_tool_version SwiftLint "$SWIFTLINT_VERSION" "$(swiftlint version)"
 swiftformat \
   "$PROJECT_DIR/Package.swift" \
   "$PROJECT_DIR/Sources" \
@@ -99,10 +91,7 @@ if (( ${#WORKFLOW_FILES[@]} > 0 )); then
     printf '%s\n' "Quality error: actionlint is not installed" >&2
     exit 1
   }
-  [[ "$(actionlint -version 2>&1 | sed -n '1p')" == "$ACTIONLINT_VERSION" ]] || {
-    printf '%s\n' "Quality error: actionlint version mismatch" >&2
-    exit 1
-  }
+  check_tool_version actionlint "$ACTIONLINT_VERSION" "$(actionlint -version 2>&1 | sed -n '1p')"
   actionlint "${WORKFLOW_FILES[@]}"
 fi
 

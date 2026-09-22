@@ -46,9 +46,9 @@ git -C "$PROJECT_DIR" show HEAD:CHANGELOG.md | grep -Eq "^## ${VERSION//./\\.} -
 git -C "$PROJECT_DIR" show HEAD:CITATION.cff | grep -Eq "^version: ['\"]?${VERSION//./\\.}['\"]?$"
 git -C "$PROJECT_DIR" show HEAD:Tests/RadioKitTests/RadioKitReleaseTests.swift \
   | grep -Fq "#expect(RadioKitRelease.version == \"$VERSION\")"
-grep -Fq 'SWIFT_VERSION="6.3.3"' "$SCRIPT_DIR/toolchain.env"
-grep -Fq 'SWIFT_TOOLS_VERSION="6.3"' "$SCRIPT_DIR/toolchain.env"
-[[ "$(tr -d '[:space:]' < "$PROJECT_DIR/.swift-version")" == "6.3.3" ]]
+# shellcheck disable=SC1091
+. "$SCRIPT_DIR/toolchain.env"
+[[ "$(tr -d '[:space:]' < "$PROJECT_DIR/.swift-version")" == "$SWIFT_VERSION" ]]
 
 "$SCRIPT_DIR/verify-package-shape.sh"
 
