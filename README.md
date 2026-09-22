@@ -10,7 +10,7 @@
 RadioKit is a Swift package for internet radio playback on Apple platforms.
 It uses `AVPlayer` for live streams and integrates with system media controls.
 
-Version `1.0.0` uses Swift tools 6.3 and requires Swift 6.3.3.
+Version `2.0.0` uses Swift tools 6.3 and requires Swift 6.3.3.
 It supports iOS 17 or later and macOS 14 or later.
 The package has no third-party package dependencies.
 
@@ -24,7 +24,7 @@ Add RadioKit to your package:
 ```swift
 .package(
   url: "https://github.com/binarydreams-io/RadioKit",
-  from: "1.0.0"
+  from: "2.0.0"
 )
 ```
 

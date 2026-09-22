@@ -2,7 +2,7 @@
 
 All notable changes appear in this file.
 
-## Unreleased
+## 2.0.0 - 2026-09-22
 
 ### Changed
 
