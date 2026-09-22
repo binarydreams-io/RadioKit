@@ -21,7 +21,7 @@ struct FullPlayer: View {
   }
 
   private var artworkAccessibilityLabel: String {
-    if let song = player.songMetadata {
+    if let song = player.song {
       return "Artwork for \(song.title) by \(song.artist)"
     }
 
@@ -105,10 +105,10 @@ struct FullPlayer: View {
   private var metadataView: some View {
     VStack {
       switch player.status {
-      case .radioStationNotSet:
+      case .noStation:
         Label("No station selected", systemImage: "antenna.radiowaves.left.and.right.slash")
 
-      case .networkWasLost:
+      case .networkLost:
         Label("No network connection", systemImage: "wifi.exclamationmark")
 
       case .streamFailed:
@@ -118,8 +118,8 @@ struct FullPlayer: View {
         ProgressView()
           .accessibilityLabel("Buffering")
 
-      case .shouldPlay, .readyToPlay, .playbackLikelyToKeepUp:
-        if let song = player.songMetadata {
+      case .idle, .readyToPlay, .playbackLikelyToKeepUp:
+        if let song = player.song {
           HStack(alignment: .top, spacing: 8) {
             VStack(spacing: 2) {
               MarqueeText(song.title)
@@ -145,7 +145,7 @@ struct FullPlayer: View {
 
   private var metadataMenu: some View {
     Menu {
-      if let url = player.songMetadata?.fullMetadata?.url {
+      if let url = player.song?.catalogSong?.url {
         Button("Open in Apple Music", systemImage: "music.note") {
           openURL(url)
         }

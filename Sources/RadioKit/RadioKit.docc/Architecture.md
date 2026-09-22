@@ -20,7 +20,7 @@ This design does not support independent simultaneous players.
 3. ``RadioPlayer/play()`` activates system integration and creates an `AVPlayerItem`.
 4. Key-value observations translate `AVPlayer` state into observable RadioKit state.
 5. A failed item advances the chain or exhausts the station.
-6. Timed metadata updates ``RadioPlayer/rawMetadata`` and ``RadioPlayer/songMetadata``.
+6. Timed metadata updates ``RadioPlayer/rawMetadata`` and ``RadioPlayer/song``.
 
 An item generation value rejects callbacks from replaced items.
 Replacing or clearing a station cancels metadata work and resets observations.

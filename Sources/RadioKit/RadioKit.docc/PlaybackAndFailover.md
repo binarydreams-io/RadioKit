@@ -35,7 +35,7 @@ A stalled stream can remain in the buffering state without producing a failure.
 RadioKit starts network monitoring with the first playback request.
 If the network path becomes unsatisfied during playback, the player pauses without consuming a candidate.
 
-``RadioPlayer/status`` becomes `networkWasLost`.
+``RadioPlayer/status`` becomes `networkLost`.
 When the path recovers, RadioKit starts the same candidate again if the user did not pause playback.
 
 Calling ``RadioPlayer/pause()`` during an outage cancels automatic recovery.

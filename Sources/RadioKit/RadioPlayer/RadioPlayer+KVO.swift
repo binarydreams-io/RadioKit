@@ -28,7 +28,7 @@ extension RadioPlayer {
 
       if network == .unsatisfied {
         shouldResumeAfterNetworkRecovery = isPlaybackRequested
-        pause(keepingStatus: .networkWasLost, preservingRecoveryIntent: true)
+        pause(keepingStatus: .networkLost, preservingRecoveryIntent: true)
       } else {
         status = .buffering
         playback = .playing
@@ -69,7 +69,7 @@ extension RadioPlayer {
   func advanceAfterStreamFailure() {
     if network == .unsatisfied {
       shouldResumeAfterNetworkRecovery = isPlaybackRequested
-      pause(keepingStatus: .networkWasLost, preservingRecoveryIntent: true)
+      pause(keepingStatus: .networkLost, preservingRecoveryIntent: true)
       return
     }
 

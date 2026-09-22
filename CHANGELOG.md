@@ -2,6 +2,25 @@
 
 All notable changes appear in this file.
 
+## Unreleased
+
+### Changed
+
+- `RadioPlayer.PlayerStatus` is now `RadioPlayer.Status`.
+- `RadioPlayer.Status` cases `radioStationNotSet`, `shouldPlay`, and `networkWasLost` are now `noStation`, `idle`, and `networkLost`.
+- `RadioPlayer.songMetadata` is now `RadioPlayer.song`.
+- `RadioSong.fullMetadata` is now `RadioSong.catalogSong`.
+- `RadioGroupSynchronizer.lastRadioStation` is now `RadioGroupSynchronizer.lastStation`.
+- `RadioStation.info` is now `RadioStation.subtitle`. The persisted key stays `info`.
+- `UIImage.artwork` and `NSImage.artwork` are now `mediaItemArtwork`.
+- `RadioStation.init` uses `nil` as the default value for `subtitle` and `artworkURL`.
+- The old names stay available as deprecated aliases.
+
+### Breaking
+
+- `RadioSong.rawMetadata` is now a non-optional `String`. Code that unwraps it with `if let` or `guard let` does not compile.
+- A `switch` over `RadioPlayer.Status` must handle the new case names. The deprecated names match in `case` patterns, but they do not satisfy exhaustiveness checks.
+
 ## 1.0.0 - 2026-08-14
 
 ### Added

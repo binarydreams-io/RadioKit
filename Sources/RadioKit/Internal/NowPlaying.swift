@@ -26,8 +26,8 @@ final class NowPlaying {
       MPMediaItemPropertyTitle: radioStation.name,
       MPNowPlayingInfoPropertyIsLiveStream: true,
     ]
-    if let info = radioStation.info {
-      nowPlayingInfo[MPMediaItemPropertyArtist] = info
+    if let subtitle = radioStation.subtitle {
+      nowPlayingInfo[MPMediaItemPropertyArtist] = subtitle
     }
 
     infoCenter.nowPlayingInfo = nowPlayingInfo

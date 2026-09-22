@@ -19,7 +19,7 @@ extension RadioPlayer {
     let nowPlaying = NowPlaying()
     self.nowPlaying = nowPlaying
     nowPlaying.setRadioStation(station)
-    nowPlaying.setArtwork(artwork?.image?.artwork)
+    nowPlaying.setArtwork(artwork?.image?.mediaItemArtwork)
 
     commandCenter = CommandCenter(
       playAction: { [weak self] in self?.handleRemotePlay() ?? false },
@@ -121,7 +121,7 @@ extension RadioPlayer {
     metadataDelegate?.cancel()
     metadataDelegate = nil
     playerItem = nil
-    songMetadata = nil
+    song = nil
     rawMetadata = nil
     playback = .paused
     player.replaceCurrentItem(with: nil)
@@ -149,7 +149,7 @@ extension RadioPlayer {
     network = isSatisfied ? .satisfied : .unsatisfied
 
     if isSatisfied {
-      guard status == .networkWasLost, shouldResumeAfterNetworkRecovery else {
+      guard status == .networkLost, shouldResumeAfterNetworkRecovery else {
         return
       }
 
@@ -160,7 +160,7 @@ extension RadioPlayer {
 
     guard isPlaybackRequested else { return }
     shouldResumeAfterNetworkRecovery = true
-    pause(keepingStatus: .networkWasLost, preservingRecoveryIntent: true)
+    pause(keepingStatus: .networkLost, preservingRecoveryIntent: true)
   }
 }
 

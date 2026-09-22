@@ -47,19 +47,17 @@ struct RadioGroupSynchronizerTests {
     let station = RadioStation(
       id: UUID(),
       name: "Example Radio",
-      info: nil,
-      streamURL: try #require(URL(string: "https://example.com/radio")),
-      artworkURL: nil
+      streamURL: try #require(URL(string: "https://example.com/radio"))
     )
 
     synchronizer.setLastStation(station)
-    #expect(synchronizer.lastRadioStation == station)
+    #expect(synchronizer.lastStation == station)
     #expect(reloadCount == 1)
 
     synchronizer.setLastStation(station)
     #expect(reloadCount == 1)
 
     let restored = RadioGroupSynchronizer(defaults: defaults) {}
-    #expect(restored.lastRadioStation == station)
+    #expect(restored.lastStation == station)
   }
 }

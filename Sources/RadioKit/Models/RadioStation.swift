@@ -13,8 +13,8 @@ public struct RadioStation: Codable, Equatable, Sendable {
   public let id: UUID
   /// The display name of the station.
   public let name: String
-  /// An optional description of the station.
-  public let info: String?
+  /// An optional subtitle of the station, for example its genre or slogan.
+  public let subtitle: String?
   /// The canonical stream URL used when no stream candidates are provided.
   public let streamURL: URL
   /// The URL of the station's artwork image, if any.
@@ -28,7 +28,7 @@ public struct RadioStation: Codable, Equatable, Sendable {
   enum CodingKeys: String, CodingKey {
     case id
     case name
-    case info
+    case subtitle = "info"
     case streamURL
     case artworkURL
     case streams
@@ -38,21 +38,21 @@ public struct RadioStation: Codable, Equatable, Sendable {
   /// - Parameters:
   ///   - id: The unique identifier of the station.
   ///   - name: The display name of the station.
-  ///   - info: An optional description of the station.
+  ///   - subtitle: An optional subtitle of the station.
   ///   - streamURL: The canonical URL used when `streams` is empty.
   ///   - artworkURL: The URL of the station's artwork image, if any.
   ///   - streams: Every playable stream. Defaults to one derived from `streamURL`.
   public init(
     id: UUID,
     name: String,
-    info: String?,
+    subtitle: String? = nil,
     streamURL: URL,
-    artworkURL: URL?,
+    artworkURL: URL? = nil,
     streams: [RadioStreamCandidate] = []
   ) {
     self.id = id
     self.name = name
-    self.info = info
+    self.subtitle = subtitle
     self.streamURL = streamURL
     self.artworkURL = artworkURL
     self.streams = streams.isEmpty ? [RadioStreamCandidate(url: streamURL)] : streams
@@ -70,7 +70,7 @@ extension RadioStation {
 
     self.id = try values.decode(UUID.self, forKey: .id)
     self.name = try values.decode(String.self, forKey: .name)
-    self.info = try values.decodeIfPresent(String.self, forKey: .info)
+    self.subtitle = try values.decodeIfPresent(String.self, forKey: .subtitle)
     self.streamURL = try values.decode(URL.self, forKey: .streamURL)
     self.artworkURL = try values.decodeIfPresent(URL.self, forKey: .artworkURL)
     let decodedStreams = try values.decodeIfPresent(
@@ -89,9 +89,39 @@ extension RadioStation {
     var container = encoder.container(keyedBy: CodingKeys.self)
     try container.encode(id, forKey: .id)
     try container.encode(name, forKey: .name)
-    try container.encode(info, forKey: .info)
+    try container.encode(subtitle, forKey: .subtitle)
     try container.encode(streamURL, forKey: .streamURL)
     try container.encode(artworkURL, forKey: .artworkURL)
     try container.encode(streams, forKey: .streams)
+  }
+}
+
+// MARK: - Deprecated Names
+
+extension RadioStation {
+  /// The previous name of ``subtitle``.
+  @available(*, deprecated, renamed: "subtitle")
+  public var info: String? {
+    subtitle
+  }
+
+  /// Creates a radio station with the previous `info` argument label.
+  @available(*, deprecated, renamed: "init(id:name:subtitle:streamURL:artworkURL:streams:)")
+  public init(
+    id: UUID,
+    name: String,
+    info: String?,
+    streamURL: URL,
+    artworkURL: URL?,
+    streams: [RadioStreamCandidate] = []
+  ) {
+    self.init(
+      id: id,
+      name: name,
+      subtitle: info,
+      streamURL: streamURL,
+      artworkURL: artworkURL,
+      streams: streams
+    )
   }
 }

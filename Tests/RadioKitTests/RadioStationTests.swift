@@ -9,9 +9,7 @@ struct RadioStationTests {
     let station = RadioStation(
       id: UUID(),
       name: "Example Radio",
-      info: nil,
-      streamURL: streamURL,
-      artworkURL: nil
+      streamURL: streamURL
     )
 
     #expect(station.streams == [RadioStreamCandidate(url: streamURL)])
@@ -25,7 +23,7 @@ struct RadioStationTests {
 
     let station = try JSONDecoder().decode(RadioStation.self, from: data)
 
-    #expect(station.info == nil)
+    #expect(station.subtitle == nil)
     #expect(station.artworkURL == nil)
     #expect(station.streams == [RadioStreamCandidate(url: station.streamURL)])
   }

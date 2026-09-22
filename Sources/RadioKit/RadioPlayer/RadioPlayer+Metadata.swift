@@ -63,16 +63,16 @@ extension RadioPlayer {
     self.rawMetadata = rawMetadata
 
     guard let rawMetadata else {
-      songMetadata = nil
+      song = nil
       return
     }
 
-    guard songMetadata?.rawMetadata != rawMetadata else { return }
+    guard song?.rawMetadata != rawMetadata else { return }
 
     do {
-      songMetadata = try RadioSong(rawMetadata: rawMetadata)
+      song = try RadioSong(rawMetadata: rawMetadata)
     } catch {
-      songMetadata = nil
+      song = nil
       Log.error(error.localizedDescription)
     }
   }

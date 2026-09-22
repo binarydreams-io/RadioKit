@@ -20,7 +20,7 @@ import Observation
   public static let shared = RadioPlayer()
 
   /// The current high-level status of the player.
-  public internal(set) var status: PlayerStatus = .radioStationNotSet
+  public internal(set) var status: Status = .noStation
 
   /// The current playback state of the player.
   public internal(set) var playback: PlaybackState = .paused {
@@ -64,24 +64,24 @@ import Observation
     didSet {
       guard let station else {
         artwork = nil
-        status = .radioStationNotSet
+        status = .noStation
         chain = nil
         deactivateSystemIntegration()
         return
       }
 
       artwork = makeArtwork(for: station)
-      status = .shouldPlay
+      status = .idle
       chain = StreamChain(station.streams)
       nowPlaying?.setRadioStation(station)
-      nowPlaying?.setArtwork(artwork?.image?.artwork)
+      nowPlaying?.setArtwork(artwork?.image?.mediaItemArtwork)
       groupSynchronizer?.setLastStation(station)
     }
   }
 
   /// Receives stream-failure events for optional host-app reporting.
   @ObservationIgnored
-  public var eventHandler: ((PlaybackEvent) -> Void)?
+  public var eventHandler: ((_ event: PlaybackEvent) -> Void)?
 
   @ObservationIgnored
   var chain: StreamChain?
@@ -90,7 +90,7 @@ import Observation
   public var groupSynchronizer: RadioGroupSynchronizer?
 
   /// The song that the current stream reports, if available.
-  public internal(set) var songMetadata: RadioSong? {
+  public internal(set) var song: RadioSong? {
     willSet {
       guard let newMetadata = newValue else { return }
 
@@ -101,7 +101,7 @@ import Observation
           guard
             let self,
             let newMetadata,
-            songMetadata === newMetadata,
+            song === newMetadata,
             isPlaybackRequested
           else { return }
 
@@ -113,7 +113,7 @@ import Observation
     didSet {
       oldValue?.cancelMetadataTask()
 
-      if let song = songMetadata {
+      if let song {
         nowPlaying?.setSong(artist: song.artist, title: song.title)
       } else {
         artwork = station.flatMap(makeArtwork(for:))
@@ -125,7 +125,7 @@ import Observation
   /// The current song artwork, or the station artwork when no song is known.
   public internal(set) var artwork: RadioArtwork? {
     didSet {
-      nowPlaying?.setArtwork(artwork?.image?.artwork)
+      nowPlaying?.setArtwork(artwork?.image?.mediaItemArtwork)
       guard let newArtwork = artwork else { return }
 
       _ = withObservationTracking {
@@ -133,7 +133,7 @@ import Observation
       } onChange: { [weak self, weak newArtwork] in
         Task { @MainActor [weak self, weak newArtwork] in
           guard let self, let newArtwork, artwork === newArtwork else { return }
-          nowPlaying?.setArtwork(newArtwork.image?.artwork)
+          nowPlaying?.setArtwork(newArtwork.image?.mediaItemArtwork)
         }
       }
     }
@@ -141,6 +141,12 @@ import Observation
 
   /// The unparsed metadata string last delivered by the stream.
   public internal(set) var rawMetadata: String?
+
+  /// The previous name of ``song``.
+  @available(*, deprecated, renamed: "song")
+  public var songMetadata: RadioSong? {
+    song
+  }
 
   private static let volumeDefaultsKey = "PlaybackVolume"
 

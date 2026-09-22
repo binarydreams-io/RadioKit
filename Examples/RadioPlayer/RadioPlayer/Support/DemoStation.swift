@@ -16,7 +16,7 @@ enum DemoStation {
     return RadioStation(
       id: id,
       name: "Record Rock Radio",
-      info: "Live rock radio",
+      subtitle: "Live rock radio",
       streamURL: streamURL,
       artworkURL: artworkURL,
       streams: [

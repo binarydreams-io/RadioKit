@@ -51,7 +51,7 @@ extension RadioPlayer {
   }
 
   func pause(
-    keepingStatus errorStatus: PlayerStatus?,
+    keepingStatus errorStatus: Status?,
     preservingRecoveryIntent: Bool
   ) {
     isPlaybackRequested = false
@@ -62,7 +62,7 @@ extension RadioPlayer {
     player.pause()
     tearDownPlayer()
     resetObservers()
-    status = errorStatus ?? (station == nil ? .radioStationNotSet : .shouldPlay)
+    status = errorStatus ?? (station == nil ? .noStation : .idle)
   }
 
   func handleRemotePlay() -> Bool {

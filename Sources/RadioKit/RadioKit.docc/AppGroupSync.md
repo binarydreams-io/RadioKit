@@ -26,7 +26,7 @@ After attachment, the player stores a selected station and changes to the playin
 Each changed value requests a reload of all WidgetKit timelines.
 
 An extension can create its own synchronizer with the same suite name.
-Read ``RadioGroupSynchronizer/lastRadioStation`` and ``RadioGroupSynchronizer/isPlaying`` from that instance.
+Read ``RadioGroupSynchronizer/lastStation`` and ``RadioGroupSynchronizer/isPlaying`` from that instance.
 
 ## Data Boundary
 

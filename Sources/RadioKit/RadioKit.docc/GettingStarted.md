@@ -23,7 +23,7 @@ func playExampleStation() {
   let station = RadioStation(
     id: UUID(),
     name: "Example Radio",
-    info: "Live radio",
+    subtitle: "Live radio",
     streamURL: primaryURL,
     artworkURL: URL(string: "https://example.com/artwork.jpg"),
     streams: [
@@ -44,7 +44,7 @@ Call ``RadioPlayer/togglePlayback()`` when one control must perform both actions
 ## Observe State
 
 ``RadioPlayer`` uses Observation and runs on the main actor.
-SwiftUI views can read its `status`, `playback`, `network`, `songMetadata`, and `artwork` properties directly.
+SwiftUI views can read its `status`, `playback`, `network`, `song`, and `artwork` properties directly.
 
 Assign the singleton only from main-actor code.
 Do not create another player instance because the public initializer is unavailable.

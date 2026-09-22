@@ -12,7 +12,7 @@ import Foundation
 @MainActor
 @Observable public final class RadioSong: Equatable {
   /// The metadata string from which the song was parsed.
-  public let rawMetadata: String?
+  public let rawMetadata: String
   /// The parsed artist name.
   public internal(set) var artist: String
   /// The parsed song title.
@@ -20,7 +20,13 @@ import Foundation
   /// The artwork from the matched Apple Music song, if available.
   public internal(set) var artwork: RadioArtwork?
   /// The matched Apple Music song, if available.
-  public internal(set) var fullMetadata: Song?
+  public internal(set) var catalogSong: Song?
+
+  /// The previous name of ``catalogSong``.
+  @available(*, deprecated, renamed: "catalogSong")
+  public var fullMetadata: Song? {
+    catalogSong
+  }
 
   private var metadataTask: Task<Void, Never>?
 
@@ -89,12 +95,12 @@ extension RadioSong {
   /// has a match. A failed lookup leaves the parsed artist and title in place.
   fileprivate func fillMetadata() async {
     do {
-      fullMetadata = try await findSong()
+      catalogSong = try await findSong()
     } catch {
       Log.debug(error.localizedDescription)
     }
 
-    if let artwork = fullMetadata?.artwork, let artworkURL = artwork.url(width: 600, height: 600) {
+    if let artwork = catalogSong?.artwork, let artworkURL = artwork.url(width: 600, height: 600) {
       self.artwork = RadioArtwork(
         url: artworkURL,
         backgroundColor: artwork.backgroundColor,

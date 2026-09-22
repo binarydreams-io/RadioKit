@@ -11,12 +11,12 @@ The output accepts metadata formats that `AVPlayer` exposes, including common IC
 RadioKit creates ``RadioSong`` only when that string contains `Artist - Title`.
 It splits at the first separator and preserves later separators in the title.
 
-When parsing fails, `rawMetadata` remains available and ``RadioPlayer/songMetadata`` becomes `nil`.
+When parsing fails, `rawMetadata` remains available and ``RadioPlayer/song`` becomes `nil`.
 
 ## Apple Music Enrichment
 
 When Apple Music access is authorized, ``RadioSong`` searches the catalog with its artist and title.
-It uses the first result as ``RadioSong/fullMetadata`` and adopts that result's artwork when available.
+It uses the first result as ``RadioSong/catalogSong`` and adopts that result's artwork when available.
 
 The first result is not a verified identity match.
 It can refer to another recording or another song with similar text.

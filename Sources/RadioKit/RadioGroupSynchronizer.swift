@@ -15,7 +15,7 @@ import WidgetKit
   @ObservationIgnored private let reloadTimelines: @MainActor () -> Void
 
   /// The most recently played station in the shared suite.
-  public internal(set) var lastRadioStation: RadioStation?
+  public internal(set) var lastStation: RadioStation?
 
   /// Whether playback is currently active.
   public internal(set) var isPlaying: Bool
@@ -28,7 +28,7 @@ import WidgetKit
     self.reloadTimelines = {
       WidgetCenter.shared.reloadAllTimelines()
     }
-    self.lastRadioStation = Self.loadLastStation(from: defaults)
+    self.lastStation = Self.loadLastStation(from: defaults)
     self.isPlaying = defaults?.bool(forKey: Keys.isPlaying) ?? false
   }
 
@@ -38,7 +38,7 @@ import WidgetKit
   ) {
     self.defaults = defaults
     self.reloadTimelines = reloadTimelines
-    self.lastRadioStation = Self.loadLastStation(from: defaults)
+    self.lastStation = Self.loadLastStation(from: defaults)
     self.isPlaying = defaults.bool(forKey: Keys.isPlaying)
   }
 }
@@ -46,15 +46,21 @@ import WidgetKit
 // MARK: - Methods
 
 extension RadioGroupSynchronizer {
+  /// The previous name of ``lastStation``.
+  @available(*, deprecated, renamed: "lastStation")
+  public var lastRadioStation: RadioStation? {
+    lastStation
+  }
+
   /// Stores a station as the most recently played station.
   /// - Parameter station: The station to store.
   public func setLastStation(_ station: RadioStation) {
-    guard station != lastRadioStation, let defaults else { return }
+    guard station != lastStation, let defaults else { return }
 
     do {
       let data = try JSONEncoder().encode(station)
       defaults.set(data, forKey: Keys.lastRadioStation)
-      lastRadioStation = station
+      lastStation = station
       reloadTimelines()
     } catch {
       Log.error("Last-station encoding failed: \(error.localizedDescription)")

@@ -50,7 +50,7 @@ func playExampleStation() {
   let station = RadioStation(
     id: UUID(),
     name: "Example Radio",
-    info: "Live radio",
+    subtitle: "Live radio",
     streamURL: primaryURL,
     artworkURL: URL(string: "https://example.com/artwork.jpg"),
     streams: [

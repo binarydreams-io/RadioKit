@@ -35,7 +35,7 @@ The package has no third-party package dependencies.
 ### Player
 
 - ``RadioPlayer``
-- ``RadioPlayer/PlayerStatus``
+- ``RadioPlayer/Status``
 - ``RadioPlayer/PlaybackState``
 - ``RadioPlayer/NetworkState``
 - ``RadioPlayer/PlaybackEvent``
