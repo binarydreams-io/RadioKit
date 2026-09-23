@@ -10,6 +10,8 @@ PACKAGE_DIR="$(cd "$PACKAGE_DIR" && pwd)"
 PACKAGE_VERSION="${RADIOKIT_PACKAGE_VERSION:-}"
 TEMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/radiokit-consumer.XXXXXX")"
 trap 'rm -rf "$TEMP_DIR"' EXIT HUP INT TERM
+# shellcheck disable=SC1091
+. "$SCRIPT_DIR/toolchain.env"
 
 if [[ -n "$PACKAGE_VERSION" && ! "$PACKAGE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   printf '%s\n' "Consumer error: package version must use X.Y.Z SemVer" >&2
@@ -18,12 +20,13 @@ fi
 
 mkdir -p "$TEMP_DIR/Consumer/Sources/RadioKitConsumer"
 swift -warnings-as-errors - \
-  "$TEMP_DIR/Consumer/Package.swift" "$PACKAGE_DIR" "$PACKAGE_VERSION" <<'SWIFT'
+  "$TEMP_DIR/Consumer/Package.swift" "$PACKAGE_DIR" "$PACKAGE_VERSION" "$SWIFT_TOOLS_VERSION" <<'SWIFT'
 import Foundation
 
 let outputPath = CommandLine.arguments[1]
 let packagePath = CommandLine.arguments[2]
 let packageVersion = CommandLine.arguments[3]
+let toolsVersion = CommandLine.arguments[4]
 let dependency: String
 
 if packageVersion.isEmpty {
@@ -36,7 +39,7 @@ if packageVersion.isEmpty {
 }
 
 let manifest = """
-// swift-tools-version: 6.3
+// swift-tools-version: \(toolsVersion)
 
 import PackageDescription
 

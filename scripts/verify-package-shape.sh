@@ -7,11 +7,14 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TEMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/radiokit-shape.XXXXXX")"
 trap 'rm -rf "$TEMP_DIR"' EXIT HUP INT TERM
+# shellcheck disable=SC1091
+. "$SCRIPT_DIR/toolchain.env"
 
 swift package --package-path "$PROJECT_DIR" dump-package > "$TEMP_DIR/package.json"
 swift package --package-path "$PROJECT_DIR" describe --type json > "$TEMP_DIR/description.json"
 
-swift -warnings-as-errors - "$TEMP_DIR/package.json" "$TEMP_DIR/description.json" <<'SWIFT'
+swift -warnings-as-errors - \
+  "$TEMP_DIR/package.json" "$TEMP_DIR/description.json" "$SWIFT_TOOLS_VERSION" <<'SWIFT'
 import Foundation
 
 func fail(_ message: String) -> Never {
@@ -32,12 +35,14 @@ func object(at path: String) -> [String: Any] {
 
 let package = object(at: CommandLine.arguments[1])
 let description = object(at: CommandLine.arguments[2])
+let toolsVersion = CommandLine.arguments[3]
 
 guard package["name"] as? String == "RadioKit" else {
   fail("package name must be RadioKit")
 }
-guard ((package["toolsVersion"] as? [String: Any])?["_version"] as? String) == "6.3.0" else {
-  fail("tools version must be 6.3")
+let declaredToolsVersion = (package["toolsVersion"] as? [String: Any])?["_version"] as? String
+guard declaredToolsVersion == toolsVersion || declaredToolsVersion == "\(toolsVersion).0" else {
+  fail("tools version must be \(toolsVersion)")
 }
 
 let platforms = package["platforms"] as? [[String: Any]] ?? []
