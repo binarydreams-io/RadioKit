@@ -1,6 +1,6 @@
 # Contributing
 
-RadioKit requires Swift 6.3.3 and an Apple development environment for its platform frameworks.
+RadioKit development requires Swift 6.4 and an Apple development environment for its platform frameworks.
 
 ## Development
 

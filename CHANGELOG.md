@@ -2,6 +2,19 @@
 
 All notable changes appear in this file.
 
+## Unreleased
+
+### Changed
+
+- CI, documentation, and release workflows build with Swift 6.4 on the `xcode-27` runner image.
+- The package still uses Swift tools 6.3, so consumers can build RadioKit with Swift 6.3 or later.
+- The quality gate warns about a different local tool version. CI still fails on a mismatch.
+- All scripts read the Swift, Swift tools, and quality-tool versions from `scripts/toolchain.env`.
+
+### Fixed
+
+- Documentation generation finds the built module with Swift 6.4.
+
 ## 2.0.0 - 2026-09-22
 
 ### Changed

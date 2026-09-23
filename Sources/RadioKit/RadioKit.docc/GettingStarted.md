@@ -2,7 +2,7 @@
 
 Create a station and start internet radio playback.
 
-RadioKit uses Swift tools 6.3 and requires Swift 6.3.3.
+RadioKit uses Swift tools 6.3 and builds with Swift 6.3 or later.
 It supports iOS 17 or later and macOS 14 or later.
 Add the `RadioKit` product to the target that owns playback.
 

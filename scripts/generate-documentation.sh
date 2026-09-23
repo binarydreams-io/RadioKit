@@ -16,10 +16,13 @@ swift build \
   --scratch-path "$TEMP_DIR/build" \
   --target RadioKit \
   -Xswiftc -warnings-as-errors
-MODULE_DIR="$(swift build \
+BIN_PATH="$(swift build \
   --package-path "$PROJECT_DIR" \
   --scratch-path "$TEMP_DIR/build" \
-  --show-bin-path)/Modules"
+  --show-bin-path)"
+# Swift 6.4 writes modules to the binary directory, not to its Modules subdirectory.
+MODULE_DIR="$BIN_PATH/Modules"
+[[ -d "$MODULE_DIR" ]] || MODULE_DIR="$BIN_PATH"
 swift -print-target-info > "$TEMP_DIR/target-info.json"
 TARGET="$(swift -warnings-as-errors - "$TEMP_DIR/target-info.json" <<'SWIFT'
 import Foundation
