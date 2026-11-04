@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use RadioKit in research or published software, cite this repository."
 title: "RadioKit"
 type: software
-version: 2.0.0
-date-released: 2026-09-22
+version: 2.1.0
+date-released: 2026-11-05
 license: MIT
 repository-code: "https://github.com/binarydreams-io/RadioKit"
 url: "https://binarydreams.io"

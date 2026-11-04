@@ -2,7 +2,11 @@
 
 All notable changes appear in this file.
 
-## Unreleased
+## 2.1.0 - 2026-11-05
+
+### Added
+
+- tvOS 17 support for RadioKit playback, system media controls, and audio-session interruption recovery.
 
 ### Changed
 

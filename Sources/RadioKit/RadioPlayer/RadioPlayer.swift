@@ -177,7 +177,7 @@ import Observation
   var shouldResumeAfterNetworkRecovery = false
   var systemIntegrationIsActive = false
 
-  #if os(iOS)
+  #if os(iOS) || os(tvOS)
     var interruptionObserver: NSObjectProtocol?
     var wasPlaybackActiveBeforeInterruption = false
   #else

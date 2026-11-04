@@ -6,7 +6,9 @@
 //
 
 import Foundation
-import WidgetKit
+#if canImport(WidgetKit)
+  import WidgetKit
+#endif
 
 /// Stores playback state in an App Group for widgets and app extensions.
 @MainActor
@@ -26,7 +28,9 @@ import WidgetKit
     let defaults = UserDefaults(suiteName: suiteName)
     self.defaults = defaults
     self.reloadTimelines = {
-      WidgetCenter.shared.reloadAllTimelines()
+      #if canImport(WidgetKit)
+        WidgetCenter.shared.reloadAllTimelines()
+      #endif
     }
     self.lastStation = Self.loadLastStation(from: defaults)
     self.isPlaying = defaults?.bool(forKey: Keys.isPlaying) ?? false

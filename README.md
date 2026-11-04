@@ -10,9 +10,9 @@
 RadioKit is a Swift package for internet radio playback on Apple platforms.
 It uses `AVPlayer` for live streams and integrates with system media controls.
 
-Version `2.0.0` uses Swift tools 6.3 and builds with Swift 6.3 or later.
+Version `2.1.0` uses Swift tools 6.3 and builds with Swift 6.3 or later.
 CI builds and tests RadioKit with Swift 6.4.
-It supports iOS 17 or later and macOS 14 or later.
+It supports iOS 17 or later, macOS 14 or later, and tvOS 17 or later.
 The package has no third-party package dependencies.
 
 <br clear="left">
@@ -25,7 +25,7 @@ Add RadioKit to your package:
 ```swift
 .package(
   url: "https://github.com/binarydreams-io/RadioKit",
-  from: "2.0.0"
+  from: "2.1.0"
 )
 ```
 
@@ -71,13 +71,13 @@ Call `pause()` to stop playback, or set `station` to `nil` to clear the player a
 
 ## App Setup
 
-### Background Audio On iOS
+### Background Audio On iOS And tvOS
 
 Enable **Background Modes** and select **Audio, AirPlay, and Picture in Picture** for the app target.
 RadioKit configures the shared audio session for long-form playback when `play()` first succeeds.
 
 Background playback and remote controls depend on app signing, capabilities, device state, and system policy.
-Validate these behaviors on a physical device before release.
+Validate these behaviors on a physical iOS device and Apple TV before release.
 
 ### Apple Music Enrichment
 
@@ -144,7 +144,7 @@ It bundles no station logo or audio and is not affiliated with or endorsed by Ra
 - Observable player, song, artwork, and App Group state.
 - System Now Playing information and play, pause, and toggle commands.
 - Network-loss recovery without consuming the next stream candidate.
-- iOS audio-session interruption recovery and background playback support.
+- iOS and tvOS audio-session interruption recovery and background playback support.
 - ICY and other timed metadata exposed by `AVPlayerItemMetadataOutput`.
 - Optional Apple Music catalog enrichment.
 - Bounded remote artwork loading and dominant-color extraction.

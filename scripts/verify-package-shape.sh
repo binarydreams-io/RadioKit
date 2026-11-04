@@ -47,15 +47,18 @@ guard declaredToolsVersion == toolsVersion || declaredToolsVersion == "\(toolsVe
 
 let platforms = package["platforms"] as? [[String: Any]] ?? []
 guard
-  platforms.count == 2,
+  platforms.count == 3,
   platforms.contains(where: {
     $0["platformName"] as? String == "ios" && $0["version"] as? String == "17.0"
   }),
   platforms.contains(where: {
     $0["platformName"] as? String == "macos" && $0["version"] as? String == "14.0"
+  }),
+  platforms.contains(where: {
+    $0["platformName"] as? String == "tvos" && $0["version"] as? String == "17.0"
   })
 else {
-  fail("platforms must be iOS 17.0 and macOS 14.0")
+  fail("platforms must be iOS 17.0, macOS 14.0, and tvOS 17.0")
 }
 
 let products = package["products"] as? [[String: Any]] ?? []

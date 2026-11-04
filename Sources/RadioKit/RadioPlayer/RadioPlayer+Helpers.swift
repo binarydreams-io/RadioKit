@@ -28,7 +28,7 @@ extension RadioPlayer {
     )
 
     setupNetworkMonitor()
-    #if os(iOS)
+    #if os(iOS) || os(tvOS)
       setupInterruptionObserver()
     #endif
 
@@ -46,7 +46,7 @@ extension RadioPlayer {
     networkMonitor?.cancel()
     networkMonitor = nil
 
-    #if os(iOS)
+    #if os(iOS) || os(tvOS)
       if let interruptionObserver {
         NotificationCenter.default.removeObserver(interruptionObserver)
         self.interruptionObserver = nil
@@ -60,7 +60,7 @@ extension RadioPlayer {
   }
 
   func activateAudioSession() -> Bool {
-    #if os(iOS)
+    #if os(iOS) || os(tvOS)
       do {
         let audioSession = AVAudioSession.sharedInstance()
         try audioSession.setCategory(
@@ -80,7 +80,7 @@ extension RadioPlayer {
   }
 
   func deactivateAudioSession() {
-    #if os(iOS)
+    #if os(iOS) || os(tvOS)
       do {
         try AVAudioSession.sharedInstance().setActive(
           false,
@@ -166,7 +166,7 @@ extension RadioPlayer {
 
 // MARK: - Audio Session Interruptions
 
-#if os(iOS)
+#if os(iOS) || os(tvOS)
   extension RadioPlayer {
     func setupInterruptionObserver() {
       guard interruptionObserver == nil else { return }

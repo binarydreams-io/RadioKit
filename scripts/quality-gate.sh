@@ -117,6 +117,22 @@ swift test \
   CODE_SIGNING_REQUIRED=NO \
   SWIFT_TREAT_WARNINGS_AS_ERRORS=YES \
   build)
+(cd "$PROJECT_DIR" && xcodebuild \
+  -scheme RadioKit \
+  -destination 'generic/platform=tvOS Simulator' \
+  -derivedDataPath "$TEMP_DIR/tvos-derived-data" \
+  CODE_SIGNING_ALLOWED=NO \
+  CODE_SIGNING_REQUIRED=NO \
+  SWIFT_TREAT_WARNINGS_AS_ERRORS=YES \
+  build)
+(cd "$PROJECT_DIR" && xcodebuild \
+  -scheme RadioKit \
+  -destination 'generic/platform=tvOS' \
+  -derivedDataPath "$TEMP_DIR/tvos-device-derived-data" \
+  CODE_SIGNING_ALLOWED=NO \
+  CODE_SIGNING_REQUIRED=NO \
+  SWIFT_TREAT_WARNINGS_AS_ERRORS=YES \
+  build)
 xcodebuild \
   -project "$PROJECT_DIR/Examples/RadioPlayer/RadioPlayer.xcodeproj" \
   -scheme RadioPlayer \
